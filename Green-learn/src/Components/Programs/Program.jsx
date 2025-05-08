@@ -7,6 +7,7 @@ import Educational_Games_Icon from '../../assets/game-icon.png'
 import Interactive_Learning_Icon from '../../assets/interactive-learning-icon.png'
 import Nature_Connection_Icon from '../../assets/nature-connection-icon.png'
 
+
 const Program = () => {
   return (
     <div className='programs'>

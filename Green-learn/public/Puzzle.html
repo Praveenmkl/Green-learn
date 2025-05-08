@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Chewy&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+    body {
+      font-family: 'Outfit';
+      background: url('D:/green learn/Green-learn/src/assets/hero.jpg') no-repeat center center fixed;
+      background-size: cover;
+      text-align: center;
+      padding: 30px;
+      margin: 0;
+      min-height: 100vh;
+      position: relative;
+      margin-top: 10px;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      /*background: rgba(255, 255, 255, 0.75);*/
+      z-index: -1;
+    }
+
+  
+    h2 {
+      color: #558b2f;
+      font-size: 1.5rem;
+      margin: 8px 0 24px;
+      font-weight: 500;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 40px;
+      flex-wrap: wrap;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .crossword-container {
+      background: white;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+      border-collapse: collapse;
+      margin: auto;
+    }
+
+    td {
+      width: 50px;
+      height: 50px;
+      text-align: center;
+      font-size: 24px;
+      transition: all 0.3s ease;
+    }
+
+    td.cell {
+      background-color: #e8f5e9;
+      border: 1px solid #a5d6a7;
+    }
+
+    td.empty {
+      background-color: #bbde9e;
+      border: none;
+    }
+
+    td input {
+      width: 100%;
+      height: 100%;
+      font-size: 24px;
+      text-transform: uppercase;
+      border: none;
+      text-align: center;
+      background-color: transparent;
+      font-family: 'Outfit';
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+    }
+
+    td input:focus {
+      background-color: #b2ebf2;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
+    }
+
+    .clues {
+      background: white;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      max-width: 350px;
+      text-align: left;
+    }
+
+    .clues h3 {
+      color: #2e7d32;
+      font-size: 1.5rem;
+      margin: 0 0 16px;
+      border-bottom: 2px solid #a5d6a7;
+      padding-bottom: 8px;
+    }
+
+    .clue {
+      margin-bottom: 16px;
+      padding: 8px;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .clue strong {
+      color: #388e3c;
+      margin-right: 8px;
+    }
+
+    .buttons {
+      margin-top: 24px;
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .button {
+      padding: 14px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-family: 'Outfit';
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border: 0;
+      outline: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn {
+      background: #abe74c;
+      color: #212121;
+
+      font-size: 16px;
+
+      cursor: pointer;
+
+
+    }
+
+    .check-button {
+      background-color: #57af4c;
+      color: #212121;
+      animation: pulse 2s infinite;
+    }
+
+    .clear-button {
+      background-color: #ddff00;
+      color: #212121;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .correct {
+      background-color: #c8e6c9 !important;
+      animation: correctPulse 0.5s ease-out;
+    }
+
+    .incorrect {
+      background-color: #ffcdd2 !important;
+      animation: incorrectShake 0.5s ease-out;
+    }
+
+    #confetti {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /*heading style*/
+
+    .playful-heading {
+      font-family: 'Fredoka One', cursive;
+      font-size: 3.25rem;
+      color: #ddff00;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      animation: bounce 1.5s ease-in-out infinite;
+      margin-top: 40px;
+      display: inline-block;
+    }
+
+    .heading-image {
+      width: 80px;
+      /* Adjust size as needed */
+      height: auto;
+      vertical-align: middle;
+      /* Aligns the image with text */
+      margin-left: 10px;
+      /* Adds space between the text and the image */
+      display: inline-block;
+    }
+
+
+    /* Bouncy keyframes */
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateY(0);
+        /*  text-shadow: 0 0 5px #baff75; */
+      }
+
+      50% {
+        transform: translateY(-15px);
+        /* text-shadow: 0 5px 15px #a2fa15; */
+      }
+    }
+
+
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+      }
+
+      70% {
+        box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+      }
+    }
+
+    @keyframes correctPulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes incorrectShake {
+      0% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-5px);
+      }
+
+      50% {
+        transform: translateX(5px);
+      }
+
+      75% {
+        transform: translateX(-5px);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      td {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+      }
+
+      td input {
+        font-size: 20px;
+      }
+
+      .clues {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h1 class="playful-heading"><img src="D:/green learn/Green-learn/src/assets/puzzle.png"
+    alt="Puzzle Image" class="heading-image"> Puzzle Mania</h1>
+ 
+
+  <div class="container">
+    <div class="crossword-container">
+      <table id="crossword">
+        <tr>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="cell"><input maxlength="1"></td>
+        </tr>
+        <tr>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="cell"><input maxlength="1"></td>
+        </tr>
+        <tr>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="cell"><input maxlength="1"></td>
+        </tr>
+        <tr>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="cell"><input maxlength="1"></td>
+        </tr>
+        <tr>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="cell"><input maxlength="1"></td>
+          <td class="cell"><input maxlength="1"></td>
+          <td class="cell"><input maxlength="1"></td>
+          <td class="cell"><input maxlength="1"></td>
+        </tr>
+        <tr>
+          <td class="cell"><input maxlength="1"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="cell"><input maxlength="1"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="cell"><input maxlength="1"></td>
+        </tr>
+        <tr>
+          <td class="cell"><input maxlength="1"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="cell"><input maxlength="1"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="cell"><input maxlength="1"></td>
+        </tr>
+        <tr>
+          <td class="cell"><input maxlength="1"></td>
+          <td class="cell"><input maxlength="1"></td>
+          <td class="cell"><input maxlength="1"></td>
+          <td class="cell"><input maxlength="1"></td>
+          <td class="cell"><input maxlength="1"></td>
+          <td class="cell"><input maxlength="1"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+        </tr>
+        <tr>
+          <td class="cell"><input maxlength="1"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="cell"><input maxlength="1"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+          <td class="empty"></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="clues">
+      <div class="across">
+        <h3>Across</h3>
+        <div class="clue">
+          Trees provide this gas essential for human breathing. (6 letters)
+        </div>
+        <div class="clue">
+          <div>Trees help reduce this, making cities cooler. (4 letters)</div>
+        </div>
+
+
+        <div class="down">
+          <h3>Down</h3>
+          <div class="clue">
+            Trees provide this material used to make furniture and paper. (4 letters)
+          </div>
+          <div class="clue">
+            Trees give us this sweet, sticky substance collected from bees. (5)
+          </div>
+          <div class="clue">
+            Trees provide this to animals and people. (7 letters)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button class="button check-button" onclick="checkAnswers()">Check Answers</button>
+      <button class="button clear-button" onclick="clearAnswers()">Clear Answers</button>
+    </div>
+
+    <canvas id="confetti"></canvas>
+
+    <script>
+      const answers = [
+        [null, null, null, null, null, null, null, "S"],
+        [null, null, null, null, null, null, null, "H"],
+        [null, null, null, null, null, null, null, "E"],
+        [null, null, null, null, null, null, null, "L"],
+        [null, null, null, null, "H", "E", "A", "T"],
+        ["W", null, null, null, "O", null, null, "E"],
+        ["O", null, null, null, "E", null, null, "R"],
+        ["O", "X", "Y", "G", "E", "N", null, null],
+        ["D", null, null, null, "Y", null, null, null]
+      ];
+
+      document.querySelectorAll('#crossword input').forEach((input, idx) => {
+        input.addEventListener('keyup', (e) => {
+          const inputs = Array.from(document.querySelectorAll('#crossword input'));
+          const currentIndex = inputs.indexOf(input);
+
+          if (e.key === 'ArrowRight' && currentIndex < inputs.length - 1) {
+            inputs[currentIndex + 1].focus();
+          } else if (e.key === 'ArrowLeft' && currentIndex > 0) {
+            inputs[currentIndex - 1].focus();
+          } else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            const rowLength = 8;
+            const targetIndex = e.key === 'ArrowUp' ?
+              currentIndex - rowLength :
+              currentIndex + rowLength;
+
+            if (targetIndex >= 0 && targetIndex < inputs.length) {
+              inputs[targetIndex].focus();
+            }
+          } else if (input.value && currentIndex < inputs.length - 1) {
+            inputs[currentIndex + 1].focus();
+          }
+        });
+      });
+
+      function checkAnswers() {
+        const table = document.getElementById("crossword");
+        let allCorrect = true;
+
+        for (let i = 0; i < table.rows.length; i++) {
+          const row = table.rows[i];
+          for (let j = 0; j < row.cells.length; j++) {
+            const cell = row.cells[j];
+            const input = cell.querySelector("input");
+            if (!input) continue;
+
+            const expected = answers[i][j];
+            if (expected) {
+              input.value = expected;
+              cell.classList.add("correct");
+              cell.classList.remove("incorrect");
+            }
+          }
+        }
+
+        startConfetti();
+      }
+
+      function clearAnswers() {
+        document.querySelectorAll('#crossword input').forEach(input => {
+          input.value = '';
+          input.parentElement.classList.remove('correct', 'incorrect');
+        });
+
+        confetti = [];
+        const canvas = document.getElementById('confetti');
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
+      const canvas = document.getElementById('confetti');
+      const ctx = canvas.getContext('2d');
+      let confetti = [];
+
+      function startConfetti() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        for (let i = 0; i < 150; i++) {
+          confetti.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * -canvas.height,
+            size: Math.random() * 10 + 5,
+            color: ['#8bc34a', '#4caf50', '#009688', '#cddc39', '#ffeb3b', '#ffc107'][Math.floor(Math.random() * 6)],
+            speed: Math.random() * 3 + 2,
+            angle: Math.random() * 6.28,
+            spin: Math.random() * 0.2 - 0.1,
+            wave: Math.random() * 0.5 + 0.5
+          });
+        }
+
+        animateConfetti();
+      }
+
+      function animateConfetti() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        confetti.forEach(p => {
+          p.y += p.speed;
+          p.angle += p.spin;
+          p.x += Math.sin(p.y * p.wave / 100) * 2;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.angle);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+          ctx.restore();
+
+          if (p.y > canvas.height) {
+            p.y = Math.random() * -100;
+            p.x = Math.random() * canvas.width;
+          }
+        });
+
+        if (confetti.length > 0) {
+          requestAnimationFrame(animateConfetti);
+        }
+      }
+
+      window.addEventListener('resize', () => {
+        if (canvas.width !== window.innerWidth || canvas.height !== window.innerHeight) {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }
+      });
+    </script>
+</body>
+
+</html>
