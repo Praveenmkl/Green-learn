@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import './Navbar.css'
 import logo from '../../assets/logo.png'
 import { Link } from 'react-scroll';
+import { useNavigate } from 'react-router-dom';
 
 
 const Navbar = () => {
      const[sticky,setSticky]=useState(false);
+     const navigate = useNavigate();
 
 
      useEffect(()=>{
@@ -24,7 +26,7 @@ const Navbar = () => {
            <li><Link to ='testimonials' smooth={true} offset={-340} duration={500}>Testimonials</Link></li>
           <li><Link to ='contact' smooth={true} offset={-260} duration={500}>Contact us</Link></li>
           
-           <li className='btn'>Sign in</li>
+            <li><button className='btn' onClick={() => navigate('/login')}>Sign in</button></li>
         </ul>
     </nav>
   )
