@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import './Auth.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
+  const navigate = useNavigate();
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Logging in...', formData);
+    // After login success
+    navigate('/', { state: { scrollToHero: true } });
   };
 
   return (
@@ -26,3 +29,4 @@ const Login = () => {
 };
 
 export default Login;
+
