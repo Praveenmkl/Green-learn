@@ -1,17 +1,18 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './PuzzleStyles.css';
 import puzzleImg from '../assets/puzzle.png'; 
 
 
 const answers = [
-   [null, null, null, null, null, "P", null, null, null, null],
-  ["R", "E", "C", "Y", "C", "L", "E", null, null, null],
-  [null, null, null, null, null, "A", null, null, null, null],
-  [null, null, null, "S", "U", "N", null, null, null, null],
-  [null, null, null, "A", null, "T", "R", "A", "S", "H"],
-  [null, null, null, "V", null, null, null, null, null, null],
-  ["B", "I", "K", "E", null, null, null, null, null, null]
-
+  [null, null, null, null, null, null, null, 'S'],
+  [null, null, null, null, null, null, null, 'H'],
+  [null, null, null, null, null, null, null, 'E'],
+  [null, null, null, null, null, null, null, 'L'],
+  [null, null, null, null, 'H', 'E', 'A', 'T'],
+  ['W', null, null, null, 'O', null, null, 'E'],
+  ['O', null, null, null, 'N', null, null, 'R'],
+  ['O', 'X', 'Y', 'G', 'E', 'N', null, null],
+  ['D', null, null, null, 'Y', null, null, null]
 ];
 
 export default function Puzzle() {
@@ -19,13 +20,13 @@ export default function Puzzle() {
   const inputsRef = useRef([]);
   const canvasRef = useRef(null);
   let confettiPieces = useRef([]);
+  const [showUsed, setShowUsed] = useState(false);
 
   useEffect(() => {
-    // Collect all input refs for navigation
     inputsRef.current = Array.from(
       containerRef.current.querySelectorAll('#crossword input')
     );
-    // Handle responsive canvas
+
     const handleResize = () => {
       const canvas = canvasRef.current;
       if (canvas) {
@@ -33,33 +34,47 @@ export default function Puzzle() {
         canvas.height = window.innerHeight;
       }
     };
+
     window.addEventListener('resize', handleResize);
     handleResize();
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handleKeyUp = (e) => {
+ const handleKeyUp = (e) => {
     const inputs = inputsRef.current;
-    const idx = inputs.indexOf(e.target);
-    const rowLen = 8;
+    const currentIndex = inputs.indexOf(e.target);
+    const totalCols = 8;
 
     switch (e.key) {
       case 'ArrowRight':
-        idx < inputs.length - 1 && inputs[idx + 1].focus();
+        if (currentIndex + 1 < inputs.length) {
+          inputs[currentIndex + 1].focus();
+        }
         break;
       case 'ArrowLeft':
-        idx > 0 && inputs[idx - 1].focus();
+        if (currentIndex - 1 >= 0) {
+          inputs[currentIndex - 1].focus();
+        }
         break;
       case 'ArrowUp':
-        idx - rowLen >= 0 && inputs[idx - rowLen].focus();
+        if (currentIndex - totalCols >= 0) {
+          inputs[currentIndex - totalCols].focus();
+        }
         break;
       case 'ArrowDown':
-        idx + rowLen < inputs.length && inputs[idx + rowLen].focus();
+        if (currentIndex + totalCols < inputs.length) {
+          inputs[currentIndex + totalCols].focus();
+        }
         break;
       default:
-        e.target.value && idx < inputs.length - 1 && inputs[idx + 1].focus();
+        if (/^[a-zA-Z]$/.test(e.key) && currentIndex + 1 < inputs.length) {
+          inputs[currentIndex + 1].focus();
+        }
+        break;
     }
   };
+
+
 
   const startConfetti = () => {
     const canvas = canvasRef.current;
@@ -105,41 +120,73 @@ export default function Puzzle() {
     animate();
   };
 
-  const checkAnswers = () => {
+  const submitAnswers = () => {
     const rows = containerRef.current.querySelectorAll('#crossword tr');
+    let allCorrect = true;
+
     rows.forEach((row, i) => {
       Array.from(row.cells).forEach((cell, j) => {
         const input = cell.querySelector('input');
-        if (!input) return;
         const expected = answers[i][j];
-        if (expected) {
-          input.value = expected;
-          cell.classList.add('correct');
-          cell.classList.remove('incorrect');
+
+        if (expected && input) {
+          if (input.value.toUpperCase() === expected.toUpperCase()) {
+            input.classList.add('correct');
+            input.classList.remove('incorrect', 'reveal');
+          } else {
+            allCorrect = false;
+            input.classList.add('incorrect');
+            input.classList.remove('correct', 'reveal');
+          }
         }
       });
     });
-    startConfetti();
+
+    if (allCorrect) {
+      startConfetti();
+    }
   };
 
-  const clearAnswers = () => {
+  const showCorrectAnswers = () => {
+    if (showUsed) return;
+
+    const rows = containerRef.current.querySelectorAll('#crossword tr');
+
+    rows.forEach((row, i) => {
+      Array.from(row.cells).forEach((cell, j) => {
+        const input = cell.querySelector('input');
+        const expected = answers[i][j];
+
+        if (expected && input) {
+          if (!input.classList.contains('correct')) {
+            input.value = expected;
+            input.classList.remove('incorrect');
+            input.classList.add('reveal');
+          }
+        }
+      });
+    });
+
+    setShowUsed(true);
+  };
+
+  const clearAll = () => {
     inputsRef.current.forEach(input => {
       input.value = '';
-      input.parentElement.classList.remove('correct', 'incorrect');
+      input.classList.remove('correct', 'incorrect', 'reveal');
     });
+
     const ctx = canvasRef.current.getContext('2d');
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     confettiPieces.current = [];
+    setShowUsed(false);
   };
 
   return (
-    <div
-      className="puzzle-page"
-      
-      ref={containerRef}
-    >
-      <h1 className="playful-heading"> <img src={puzzleImg} alt="Puzzle Icon" className="heading-image" />
-       Puzzle Mania
+    <div className="puzzle-page" ref={containerRef}>
+      <h1 className="playful-heading">
+        <img src={puzzleImg} alt="Puzzle Icon" className="heading-image" />
+        Puzzle Mania
       </h1>
 
       <div className="pizzlecontainer">
@@ -169,36 +216,23 @@ export default function Puzzle() {
         <div className="clues">
           <div className="across">
             <h3>Across</h3>
-            <div className="clue">
-              Trees provide this gas essential for human breathing. (6 letters)
-            </div>
-            <div className="clue">
-              Trees help reduce this, making cities cooler. (4 letters)
-            </div>
+            <div className="clue">Trees provide this gas essential for human breathing. (6 letters)</div>
+            <div className="clue">Trees help reduce this, making cities cooler. (4 letters)</div>
+          </div>
 
-            <div className="down">
-              <h3>Down</h3>
-              <div className="clue">
-                Trees provide this material used to make furniture and paper. (4 letters)
-              </div>
-              <div className="clue">
-                Trees give us this sweet, sticky substance collected from bees. (5)
-              </div>
-              <div className="clue">
-                Trees provide this to animals and people. (7 letters)
-              </div>
-            </div>
+          <div className="down">
+            <h3>Down</h3>
+            <div className="clue">Trees provide this material used to make furniture and paper. (4 letters)</div>
+            <div className="clue">Trees give us this sweet, sticky substance collected from bees. (5 letters)</div>
+            <div className="clue">Trees provide this to animals and people. (7 letters)</div>
           </div>
         </div>
       </div>
 
       <div className="buttons">
-        <button className="button check-button" onClick={checkAnswers}>
-          Check Answers
-        </button>
-        <button className="button clear-button" onClick={clearAnswers}>
-          Clear Answers
-        </button>
+        <button className="button submit-button" onClick={submitAnswers}>Submit</button>
+        <button className="button show-button" onClick={showCorrectAnswers}>Show Answers</button>
+        <button className="button clear-button" onClick={clearAll}>Clear</button>
       </div>
 
       <canvas id="confetti" ref={canvasRef}></canvas>

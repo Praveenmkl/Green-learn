@@ -8,7 +8,7 @@
   padding: 0px 0;
   margin: 0;
   /* Make the page exactly one viewport height */
-  height: 110vh;
+  height: 120vh;
   position:relative;
   width: 100%;
   overflow: hidden;
@@ -194,6 +194,77 @@ td input:focus {
 }
 
 
+input.correct {
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
+}
+
+input.incorrect {
+  background-color: #f44336;
+  color: white;
+}
+
+input.reveal {
+  background-color: #006400;
+  color: white;
+  font-weight: bold;
+}
+
+.pizzlecontainer {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap; /* So it works nicely on smaller screens */
+  align-items: flex-start;
+}
+
+.clues {
+  width: 280px;
+  background-color: white;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+}
+
+.pizzlecontainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.crossword-and-clues {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+}
+
+.crossword-container {
+  background-color: #c0eec0;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.clues {
+  width: 300px;
+  background-color: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.clue {
+  margin-bottom: 10px;
+}
+
+
+
+
+
 @keyframes bounce {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-15px); }
@@ -222,3 +293,4 @@ td input:focus {
   td input { font-size: 20px; }
   .clues { max-width: 100%; }
 }
+

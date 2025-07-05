@@ -12,23 +12,25 @@ import Nature_Connection_Icon from '../../assets/nature-connection-icon.png'
 const Program = () => {
   const navigate = useNavigate()
 
+ 
+
   return (
     <div className='programs'>
-    <div className='program'>
-        <img src={Nature_Connection} alt="" />
-        <div className='caption'>
-            <img src={Nature_Connection_Icon}/>
-            <p>Nature Connection</p>
-        </div>
+<div className='program' onClick={() => navigate('/videocards')}>
+    <img src={Interactive_Learning} alt="" />
+    <div className='caption'>
+      <img src={Interactive_Learning_Icon} alt="" />
+      <p>Interactive Learning</p>
     </div>
-    <div className='program'>
+</div>
+    <div className='program' onClick={() => navigate('/game')}>
         <img src={Educational_Games} alt="" />
         <div className='caption'>
             <img src={Educational_Games_Icon}/>
             <p>Educational Games</p>
         </div>
     </div>
-    <div className='program'   onClick={() => navigate('/puzzle')}>
+    <div className='program'       onClick={() => navigate('/puzzlecard')}           >
         <img src={Interactive_Learning} alt="" />
         <div className='caption'>
             <img src={Interactive_Learning_Icon}/>
