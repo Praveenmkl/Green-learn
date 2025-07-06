@@ -1,0 +1,62 @@
+.story-page {
+  width: 90%;
+  max-width: 800px;
+  margin: 50px auto;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
+  line-height: 1.7;
+  color: #333;
+}
+
+.story-page h1 {
+  text-align: center;
+  font-size: 32px;
+  color: #000000;
+  margin-bottom: 30px;
+}
+
+.story-page h2 {
+  font-size: 24px;
+  color: #000000;
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+.story-page p {
+  font-size: 18px;
+  text-align: justify;
+ font-weight: bold;
+  
+}
+
+.story-page img {
+  display: block;
+  margin: 20px auto;
+  max-width: 80%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.story-page ul,
+.story-page ol {
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+.story-page li {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.story-page .moral {
+  background-color: #e8f5e9;
+  padding: 20px;
+  margin-top: 30px;
+  border-left: 5px solid #000000;
+  border-radius: 8px;
+  font-size: 18px;
+}

@@ -1,63 +1,68 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './PuzzleStyles.css';
-import puzzleImg from '../assets/puzzle.png'; 
-
+import puzzleImg from '../assets/puzzle.png';
 
 const answers = [
-   [null, null, null, null, null, "P", null, null, null, null],
-  ["R", "E", "C", "Y", "C", "L", "E", null, null, null],
-  [null, null, null, null, null, "A", null, null, null, null],
-  [null, null, null, "S", "U", "N", null, null, null, null],
-  [null, null, null, "A", null, "T", "R", "A", "S", "H"],
-  [null, null, null, "V", null, null, null, null, null, null],
-  ["B", "I", "K", "E", null, null, null, null, null, null]
-
+  [null, null, null, null, null, null, 'L', null, null, null, null, null, 'A', null, null],
+  [null, null, null, null, null, null, 'E', null, null, null, null, null, 'C', null, null],
+  [null, null, 'G', 'L', 'O', 'B', 'A', 'L', 'W', 'A', 'R', 'M', 'I', 'N', 'G'],
+  [null, null, null, null, null, null, 'A', null, null, null, null, null, 'D', null, null],
+  [null, null, null, null, null, null, 'V', null, null, null, null, null, 'R', null, null],
+  [null, null, null, null, null, null, 'E', null, null, null, null, null, 'A', null, null],
+  ['L', 'U', 'N', 'G', 'D', 'I', 'S', 'E', 'A', 'S', 'E', null, 'I', null, null],
+  [null, null, null, null, null, null, null, null, null, 'M', null, null, 'N', null, null],
+  [null, null, null, null, null, null, null, null, null, 'O', null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null, 'G', null, null, null, null, null],
 ];
 
 export default function Puzzle() {
   const containerRef = useRef(null);
   const inputsRef = useRef([]);
   const canvasRef = useRef(null);
-  let confettiPieces = useRef([]);
+  const confettiPieces = useRef([]);
+  const [showUsed, setShowUsed] = useState(false);
 
   useEffect(() => {
-    // Collect all input refs for navigation
     inputsRef.current = Array.from(
       containerRef.current.querySelectorAll('#crossword input')
     );
-    // Handle responsive canvas
+
     const handleResize = () => {
-      const canvas = canvasRef.current;
-      if (canvas) {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+      if (canvasRef.current) {
+        canvasRef.current.width = window.innerWidth;
+        canvasRef.current.height = window.innerHeight;
       }
     };
+
     window.addEventListener('resize', handleResize);
     handleResize();
+
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const handleKeyUp = (e) => {
     const inputs = inputsRef.current;
-    const idx = inputs.indexOf(e.target);
-    const rowLen = 8;
+    const index = inputs.indexOf(e.target);
+    const cols = 15;
 
     switch (e.key) {
       case 'ArrowRight':
-        idx < inputs.length - 1 && inputs[idx + 1].focus();
+        if (index + 1 < inputs.length) inputs[index + 1].focus();
         break;
       case 'ArrowLeft':
-        idx > 0 && inputs[idx - 1].focus();
+        if (index - 1 >= 0) inputs[index - 1].focus();
         break;
       case 'ArrowUp':
-        idx - rowLen >= 0 && inputs[idx - rowLen].focus();
+        if (index - cols >= 0) inputs[index - cols].focus();
         break;
       case 'ArrowDown':
-        idx + rowLen < inputs.length && inputs[idx + rowLen].focus();
+        if (index + cols < inputs.length) inputs[index + cols].focus();
         break;
       default:
-        e.target.value && idx < inputs.length - 1 && inputs[idx + 1].focus();
+        if (/^[a-zA-Z]$/.test(e.key) && index + 1 < inputs.length) {
+          inputs[index + 1].focus();
+        }
+        break;
     }
   };
 
@@ -65,6 +70,7 @@ export default function Puzzle() {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     confettiPieces.current = [];
+
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
@@ -73,13 +79,11 @@ export default function Puzzle() {
         x: Math.random() * canvas.width,
         y: Math.random() * -canvas.height,
         size: Math.random() * 10 + 5,
-        color: ['#8bc34a', '#4caf50', '#009688', '#cddc39', '#ffeb3b', '#ffc107'][
-          Math.floor(Math.random() * 6)
-        ],
+        color: ['#8bc34a', '#4caf50', '#009688', '#cddc39', '#ffeb3b', '#ffc107'][Math.floor(Math.random() * 6)],
         speed: Math.random() * 3 + 2,
-        angle: Math.random() * 6.28,
+        angle: Math.random() * Math.PI * 2,
         spin: Math.random() * 0.2 - 0.1,
-        wave: Math.random() * 0.5 + 0.5
+        wave: Math.random() * 0.5 + 0.5,
       });
     }
 
@@ -89,119 +93,137 @@ export default function Puzzle() {
         p.y += p.speed;
         p.angle += p.spin;
         p.x += Math.sin((p.y * p.wave) / 100) * 2;
+
         ctx.save();
         ctx.translate(p.x, p.y);
         ctx.rotate(p.angle);
         ctx.fillStyle = p.color;
         ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
         ctx.restore();
+
         if (p.y > canvas.height) {
           p.y = Math.random() * -100;
           p.x = Math.random() * canvas.width;
         }
       });
+
       requestAnimationFrame(animate);
     };
+
     animate();
   };
 
-  const checkAnswers = () => {
+  const submitAnswers = () => {
     const rows = containerRef.current.querySelectorAll('#crossword tr');
+    let allCorrect = true;
+
     rows.forEach((row, i) => {
       Array.from(row.cells).forEach((cell, j) => {
         const input = cell.querySelector('input');
-        if (!input) return;
         const expected = answers[i][j];
-        if (expected) {
-          input.value = expected;
-          cell.classList.add('correct');
-          cell.classList.remove('incorrect');
+
+        if (expected && input) {
+          if (input.value.toUpperCase() === expected.toUpperCase()) {
+            input.classList.add('correct');
+            input.classList.remove('incorrect', 'reveal');
+          } else {
+            allCorrect = false;
+            input.classList.add('incorrect');
+            input.classList.remove('correct', 'reveal');
+          }
         }
       });
     });
-    startConfetti();
+
+    if (allCorrect) startConfetti();
   };
 
-  const clearAnswers = () => {
+  const showCorrectAnswers = () => {
+    if (showUsed) return;
+
+    const rows = containerRef.current.querySelectorAll('#crossword tr');
+
+    rows.forEach((row, i) => {
+      Array.from(row.cells).forEach((cell, j) => {
+        const input = cell.querySelector('input');
+        const expected = answers[i][j];
+
+        if (expected && input && !input.classList.contains('correct')) {
+          input.value = expected;
+          input.classList.remove('incorrect');
+          input.classList.add('reveal');
+        }
+      });
+    });
+
+    setShowUsed(true);
+  };
+
+  const clearAll = () => {
     inputsRef.current.forEach(input => {
       input.value = '';
-      input.parentElement.classList.remove('correct', 'incorrect');
+      input.classList.remove('correct', 'incorrect', 'reveal');
     });
+
     const ctx = canvasRef.current.getContext('2d');
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     confettiPieces.current = [];
+    setShowUsed(false);
   };
 
   return (
-    <div
-      className="puzzle-page"
-      
-      ref={containerRef}
-    >
-      <h1 className="playful-heading"> <img src={puzzleImg} alt="Puzzle Icon" className="heading-image" />
-       Puzzle Mania
+    <div className="puzzle-page" ref={containerRef}>
+      <h1 className="playful-heading">
+        <img src={puzzleImg} alt="Puzzle Icon" className="heading-image" />
+        Puzzle Mania
       </h1>
 
-      <div className="pizzlecontainer">
-        <div className="crossword-container">
-          <table id="crossword">
-            <tbody>
-              {answers.map((row, i) => (
-                <tr key={i}>
-                  {row.map((cell, j) =>
-                    cell === null ? (
-                      <td key={j} className="empty" />
-                    ) : (
-                      <td key={j} className="cell">
-                        <input
-                          maxLength={1}
-                          onKeyUp={handleKeyUp}
-                        />
-                      </td>
-                    )
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <div className="puzzlecontainer">
+        <div className="crossword-and-clues">
+          <div className="crossword-container">
+            <table id="crossword">
+              <tbody>
+                {answers.map((row, i) => (
+                  <tr key={i}>
+                    {row.map((cell, j) =>
+                      cell === null ? (
+                        <td key={j} className="empty" />
+                      ) : (
+                        <td key={j} className="cell">
+                          <input maxLength={1} autoComplete="off" onKeyUp={handleKeyUp} />
+                        </td>
+                      )
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-        <div className="clues">
-          <div className="across">
-            <h3>Across</h3>
-            <div className="clue">
-              Trees provide this gas essential for human breathing. (6 letters)
-            </div>
-            <div className="clue">
-              Trees help reduce this, making cities cooler. (4 letters)
+          <div className="clues">
+            <div className="across">
+              <h3>Across</h3>
+              <div className="clue">A long-term increase in Earth's average temperature due to greenhouse gas emissions. (13)</div>
+              <div className="clue">A health condition affecting the respiratory system, often caused by pollution or smoking. (11)</div>
             </div>
 
             <div className="down">
               <h3>Down</h3>
-              <div className="clue">
-                Trees provide this material used to make furniture and paper. (4 letters)
-              </div>
-              <div className="clue">
-                Trees give us this sweet, sticky substance collected from bees. (5)
-              </div>
-              <div className="clue">
-                Trees provide this to animals and people. (7 letters)
-              </div>
+              <div className="clue">To go away or abandon; also a part of a plant. (7)</div>
+              <div className="clue">Rainfall made acidic by atmospheric pollution, damaging forests and water sources. (8)</div>
+              <div className="clue">A type of air pollution resulting from vehicle emissions and industrial fumes. (4)</div>
             </div>
           </div>
         </div>
       </div>
 
       <div className="buttons">
-        <button className="button check-button" onClick={checkAnswers}>
-          Check Answers
-        </button>
-        <button className="button clear-button" onClick={clearAnswers}>
-          Clear Answers
-        </button>
+        <button className="button submit-button" onClick={submitAnswers}>Submit</button>
+        <button className="button show-button" onClick={showCorrectAnswers}>Show Answers</button>
+        <button className="button clear-button" onClick={clearAll}>Clear</button>
       </div>
 
-      <canvas id="confetti" ref={canvasRef}></canvas>
+      <canvas id="confetti" ref={canvasRef} />
     </div>
   );
 }

@@ -9,6 +9,9 @@ import Educational_Games_Icon from '../../assets/game-icon.png'
 import Interactive_Learning_Icon from '../../assets/interactive-learning-icon.png'
 import Nature_Connection_Icon from '../../assets/nature-connection-icon.png'
 
+import BedtimeStoriesImage from '../../assets/educational_stories.png';
+import BedtimeStoriesIcon from '../../assets/bedtime-icon.png';
+
 const Program = () => {
   const navigate = useNavigate()
 
@@ -17,9 +20,9 @@ const Program = () => {
   return (
     <div className='programs'>
 <div className='program' onClick={() => navigate('/videocards')}>
-    <img src={Interactive_Learning} alt="" />
+    <img src={Nature_Connection} alt="" />
     <div className='caption'>
-      <img src={Interactive_Learning_Icon} alt="" />
+      <img src={Nature_Connection_Icon} alt="" />
       <p>Interactive Learning</p>
     </div>
 </div>
@@ -36,7 +39,17 @@ const Program = () => {
             <img src={Interactive_Learning_Icon}/>
             <p>Interactive Learning</p>
         </div>
-    </div>     
+    </div>   
+
+    <div className='program' onClick={() => navigate('/bedtime-stories')}>
+  <img src={BedtimeStoriesImage} alt="" />
+  <div className='caption'>
+    <img src={BedtimeStoriesIcon} />
+    <p>Bedtime Stories</p>
+  </div>
+</div>
+
+
 </div>
   )
 }

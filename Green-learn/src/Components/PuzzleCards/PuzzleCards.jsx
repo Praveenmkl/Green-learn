@@ -82,7 +82,9 @@ const PuzzleCards = () => {
 
   return (
     
+    
     <div className="puzzle-cards-container">
+      
       {puzzleCategories.map((category) => (
         <div
           key={category.id}

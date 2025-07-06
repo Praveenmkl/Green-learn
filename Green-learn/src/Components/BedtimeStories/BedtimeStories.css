@@ -1,0 +1,44 @@
+.bedtime-stories-container {
+  width: 90%;
+  margin: 50px auto;
+  text-align: center;
+}
+
+.bedtime-heading {
+  font-size: 32px;
+  margin-bottom: 30px;
+}
+
+.stories-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.story-card {
+  flex-basis: 22%;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s;
+  text-align: center;
+}
+
+.story-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.story-card h3 {
+  margin: 15px 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.story-card:hover {
+  transform: scale(1.05);
+}

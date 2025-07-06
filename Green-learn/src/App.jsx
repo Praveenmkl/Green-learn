@@ -31,6 +31,17 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import Puzzle from './Pages/Puzzle'
 
+
+
+
+import BedtimeStories from './Components/BedtimeStories/BedtimeStories';
+import Lila from './Pages/Stories/Lila';
+import Benny from './Pages/Stories/Benny';
+import SolarPanel from './Pages/Stories/SolarPanel';
+import RaviStory from './Pages/Stories/Ravi';
+
+
+
 const ScrollToHero = () => {
   const location = useLocation();
 
@@ -59,7 +70,8 @@ const Home = ({ setPlayState }) => (
       <Title subTitle='CONTACT US' Title='Get in Touch' />
       <Contact />
       <Footer />
-      <Video/>
+  
+    
     </div>
   </>
 );
@@ -121,7 +133,23 @@ const App = () => {
         <Route path ="/videocards" element ={<VideoCards/>}/>
          <Route path="/game" element={<GamePage />} />
           <Route path="/program" element={<Program />} />
+          <Route path="/video/:id" element={<Video />} />
 
+
+
+
+
+        <Route path="/" element={<Home setPlayState={setPlayState} />} />
+  <Route path="/login" element={<Login />} />
+  <Route path="/signup" element={<SignUp />} />
+  <Route path="/puzzle" element={<Puzzle />} />
+  <Route path="/bedtime-stories" element={<BedtimeStories />} />
+  <Route path="/stories/lila" element={<Lila />} />
+  <Route path="/stories/benny" element={<Benny />} />
+  <Route path="/stories/solar" element={<SolarPanel />} />
+  <Route path="/stories/ravi" element={<RaviStory/>} />
+ 
+ 
 
       </Routes>
       <VideoPlayer playState={playState} setPlayState={setPlayState} />

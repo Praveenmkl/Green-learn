@@ -3,20 +3,15 @@ import './PuzzleStyles.css';
 import puzzleImg from '../assets/puzzle.png';
 
 const answers = [
-  [null, null, 'G', null, null, null, null, null, null, null, null],
-  [null, null, 'R', null, null, null, null, null, 'H', null, null],
-  [null, null, 'O', null, null, null, null, null, 'E', null, null],
-  [null, null, 'U', null, null, null, 'P', null, 'P', null, null],
-  [null, null, 'N', null, null, null, 'O', null, 'A', null, null],
-  [null, null, 'D', null, null, null, 'L', null, "T", null, null],
-  [null, null, 'W', null, null, null, 'L', null, "I", null, null],
-  [null, null, 'A', null, 'A', 'Q', 'U', 'A', 'T', 'I', 'C'],
-  [null, null, 'T', null, null, null, 'T', null, 'I', null, null],
-  ['C', 'H', 'E', 'M', 'I', 'C', 'A', 'L', 'S', null, null],
-  [null, null, 'R', null, 's', null, 'L', null, null, null, null],
-  [null, null, null, null, 's', null, 'L', null, null, null, null],
-  [null, 'F', 'L', 'O', 'O', 'D', 'S', null, null, null, null],
-  
+  ['E', null, null, null, null, null, null, null, null, null, 'P', null],
+  ['C', 'O', 'N', 'S', 'E', 'R', 'V', 'A', 'T', 'I', 'O', 'N'],
+  ['O', null, null, null, null, null, null, null, null, null, 'L', null],
+  ['S', null, null, null, null, null, null, null, null, null, 'L', null],
+  ['Y', null, null, null, null, null, null, null, null, null, 'U', null],
+  ['S', null, null, null, null, 'C', 'L', 'I', 'M', 'A', 'T', 'E'],
+  ['t', null, null, null, null, null, null, null, null, null, 'I', null],
+  ['E', null, null, null, null, null, null, null, null, null, 'T', null],
+  ['M', null, null, 'R', 'E', 'C', 'Y', 'C', 'L', 'I', 'N', 'G'],
 ];
 
 export default function Puzzle() {
@@ -83,9 +78,7 @@ export default function Puzzle() {
         x: Math.random() * canvas.width,
         y: Math.random() * -canvas.height,
         size: Math.random() * 10 + 5,
-        color: ['#8bc34a', '#4caf50', '#009688', '#cddc39', '#ffeb3b', '#ffc107'][
-          Math.floor(Math.random() * 6)
-        ],
+        color: ['#8bc34a', '#4caf50', '#009688', '#cddc39', '#ffeb3b', '#ffc107'][Math.floor(Math.random() * 6)],
         speed: Math.random() * 3 + 2,
         angle: Math.random() * Math.PI * 2,
         spin: Math.random() * 0.2 - 0.1,
@@ -186,7 +179,7 @@ export default function Puzzle() {
         Puzzle Mania
       </h1>
 
-      <div className="pizzlecontainer">
+      <div className="puzzlecontainer">
         <div className="crossword-and-clues">
           <div className="crossword-container">
             <table id="crossword">
@@ -215,15 +208,25 @@ export default function Puzzle() {
           <div className="clues">
             <div className="across">
               <h3>Across</h3>
-              <div className="clue">A long-term increase in Earth's average temperature due to greenhouse gas emissions.(13)</div>
-              <div className="clue">A health condition affecting the respiratory system, often caused by pollution or smoking.(11)</div>
+              <div className="clue">
+                The responsible management and protection of natural resources to prevent exploitation and preserve the environment. (11)
+              </div>
+              <div className="clue">
+                The average weather conditions in a region over a long period of time. (7)
+              </div>
+              <div className="clue">
+                The process of converting waste into reusable material to reduce environmental impact. (9)
+              </div>
             </div>
 
             <div className="down">
               <h3>Down</h3>
-              <div className="clue">To go away from a place or situation. Also related to nature (like "leaf") in an environmental context.(5)</div>
-              <div className="clue">Rainfall made acidic by atmospheric pollution, damaging forests and water sources.(8)</div>
-              <div className="clue">A type of air pollution resulting from vehicle emissions and industrial fumes.(4)</div>
+              <div className="clue">
+                A community of living organisms interacting with each other and their natural environment. (9)
+              </div>
+              <div className="clue">
+                The presence of harmful substances in the air, water, or soil that affects living organisms. (9)
+              </div>
             </div>
           </div>
         </div>
