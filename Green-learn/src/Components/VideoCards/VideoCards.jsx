@@ -4,7 +4,7 @@ import thumbnail from '../../assets/video-thumbnail.png'; // Example thumbnail i
 import { useNavigate } from 'react-router-dom';
 
 const videoData = [
-  { id: 1, title: 'Explore the Forest', thumbnail: thumbnail },
+  { id: 1, title: 'Explore the Forest', thumbnail: thumbnail,url: "https://firebasestorage.googleapis.com/v0/b/greenlearn-220e5.firebasestorage.app/o/Videos%2F0424(1).mp4?alt=media&token=46d7580d-3429-4a45-95bb-35a08c2b32d0", },
   { id: 2, title: 'Animals in Action', thumbnail: thumbnail },
   { id: 3, title: 'Protecting Nature', thumbnail: thumbnail },
   { id: 4, title: 'Tree Facts', thumbnail: thumbnail },
@@ -21,7 +21,7 @@ const VideoCards = () => {
 
   const handleCardClick = (videoId) => {
     // Navigate to a specific video page if needed
-    console.log(`Clicked video ID: ${videoId}`);
+     navigate(`/video/${videoId}`);
     // Example: navigate(`/video/${videoId}`);
   };
 

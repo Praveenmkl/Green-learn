@@ -5,7 +5,7 @@ const GamePage = () => {
     <div style={{ textAlign: 'center', padding: '20px' }}>
       <h2>Enjoy Our Educational Game!</h2>
       <iframe
-        src="https://gd.games/games/ff22d36e-66e6-4252-a2fe-a9755d5bb508"
+        src="https://gd.games/games/564914a3-b523-475b-9231-5dcd791e7209"
         width="800"
         height="600"
         allowFullScreen
